@@ -5,4 +5,6 @@ export enum ErrorTypes {
     UnauthorizedError = 'UnauthorizedError',
     ForbiddenError = 'ForbiddenError',
     InternalServerError = 'InternalServerError',
+    AuthenticationError = 'AuthenticationError',
+    AppError = 'AppError',
 }
