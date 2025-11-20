@@ -1,0 +1,15 @@
+# Backend dependencies and environment
+backend/node_modules/
+backend/.env
+backend/.env.local
+backend/.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+*.env
