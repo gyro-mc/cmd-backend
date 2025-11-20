@@ -48,4 +48,10 @@ export class AuthController {
         });
 
     }
+    async refreshToken(req: Request, res: Response) {
+        const { refreshToken } = req.body;
+        const result = await this.userAuthService.refreshToken(refreshToken);
+
+        res.json(result.toJSON());
+    }
 }

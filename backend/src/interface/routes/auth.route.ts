@@ -9,9 +9,9 @@ import { AuthRepository } from "../../infrastructure/repositories/AuthRepository
 import { authMiddleware } from "../middlewares/authMiddleware";
 import { CreateUserDtoSchema } from "../../application/dto/requests/CreateUserDto";
 import { requireRole } from "../middlewares/requireAuth";
+import { RefreshTokenDtoSchema } from "../../application/dto/requests/RefreshTokenDto";
 
 const router = Router();
-
 // ✅ Create instances (Dependency Injection)
 const userRepository = new UserRepository();
 const authRepository = new AuthRepository();
@@ -38,6 +38,11 @@ router.post(
     requireRole(['admin']),
     validate(CreateUserDtoSchema),
     asyncWrapper((req, res) => authController.createUser(req, res))
-)
+);
+router.post("/refresh-token",
+    authMiddleware,
+    validate(RefreshTokenDtoSchema),
+    asyncWrapper((req, res) => authController.refreshToken(req, res))
+);
 
 export default router;
