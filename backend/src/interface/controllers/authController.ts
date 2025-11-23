@@ -16,6 +16,7 @@ export class AuthController {
   async logout(req: AuthRequest, res: Response) {
     const userId = req.user?.id;
     await this.userAuthService.logoutUser(userId);
+    
     res.json({
       status: 200,
       success: true,
