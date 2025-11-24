@@ -229,4 +229,81 @@ router.post(
   asyncWrapper((req, res) => authController.refreshToken(req, res))
 );
 
+/**
+ * @swagger
+ * /auth/me:
+ *   post:
+ *     summary: Get current user information
+ *     description: Retrieve the authenticated user's profile information
+ *     tags:
+ *       - Authentication
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User information retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: number
+ *                   example: 200
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       description: User ID (UUID)
+ *                       example: c0b837f3-5a95-44b6-bb60-7aeccc4afe9f
+ *                     email:
+ *                       type: string
+ *                       format: email
+ *                       example: user@example.com
+ *                     firstName:
+ *                       type: string
+ *                       example: John
+ *                     lastName:
+ *                       type: string
+ *                       example: Doe
+ *                     role:
+ *                       type: string
+ *                       enum: [admin, doctor, receptionist]
+ *                       example: doctor
+ *                 error:
+ *                   type: null
+ *                   example: null
+ *       401:
+ *         description: Unauthorized - Invalid or missing token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: number
+ *                   example: 401
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 data:
+ *                   type: null
+ *                   example: null
+ *                 error:
+ *                   type: object
+ *                   properties:
+ *                     message:
+ *                       type: string
+ *                       example: Invalid or expired token
+ */
+router.post(
+  "/me",
+  authMiddleware,
+  asyncWrapper((req, res) => authController.getMe(req, res))
+);
+
 export default router;

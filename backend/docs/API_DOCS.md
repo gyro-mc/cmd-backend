@@ -258,6 +258,49 @@ Set-Cookie: refreshToken=; Path=/api/auth/refresh-token; Expires=Thu, 01 Jan 197
 
 ---
 
+## 5. Get Current User (Me)
+
+**Endpoint:** `POST /me`
+
+**Description:** Retrieve the authenticated user's profile information
+
+**Authentication:** Required (Bearer token)
+
+**Request Body:** Empty
+
+**Response (200 OK):**
+
+```json
+{
+  "success": true,
+  "status": 200,
+  "data": {
+    "id": "c0b837f3-5a95-44b6-bb60-7aeccc4afe9f",
+    "email": "user@example.com",
+    "firstName": "John",
+    "lastName": "Doe",
+    "role": "doctor"
+  },
+  "error": null
+}
+```
+
+**Error (401):**
+
+```json
+{
+  "success": false,
+  "status": 401,
+  "data": null,
+  "error": {
+    "type": "AuthenticationError",
+    "message": "Invalid or expired token"
+  }
+}
+```
+
+---
+
 ## Authentication Header Format
 
 All protected endpoints require:
@@ -301,7 +344,7 @@ curl -X POST http://localhost:3000/api/auth/logout \
 
 ---
 
-## Cookie Security
+## 6. Cookie Security
 
 ### Refresh Token Storage
 
@@ -330,9 +373,9 @@ Refresh tokens are stored in **secure HTTP-only cookies** for enhanced security:
 
 ---
 
-## 5. Doctors API
+## 7. Doctors API
 
-### 5.1 Create Doctor
+### 7.1 Create Doctor
 
 **Endpoint:** `POST /doctors`
 
@@ -379,7 +422,7 @@ Refresh tokens are stored in **secure HTTP-only cookies** for enhanced security:
 }
 ```
 
-### 5.2 Get All Doctors
+### 7.2 Get All Doctors
 
 **Endpoint:** `GET /doctors`
 
@@ -420,7 +463,7 @@ Refresh tokens are stored in **secure HTTP-only cookies** for enhanced security:
 }
 ```
 
-### 5.3 Get Doctor by ID
+### 7.3 Get Doctor by ID
 
 **Endpoint:** `GET /doctors/:id`
 
@@ -450,13 +493,13 @@ Refresh tokens are stored in **secure HTTP-only cookies** for enhanced security:
 }
 ```
 
-### 5.4 Update Doctor (Placeholder)
+### 7.4 Update Doctor (Placeholder)
 
 **Endpoint:** `PUT /doctors/:id`
 
 **Description:** Update doctor details (Not yet implemented)
 
-### 5.5 Delete Doctor (Placeholder)
+### 7.5 Delete Doctor (Placeholder)
 
 **Endpoint:** `DELETE /doctors/:id`
 

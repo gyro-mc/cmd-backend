@@ -89,4 +89,14 @@ export class AuthController {
       error: null,
     });
   }
+
+  async getMe(req: AuthRequest, res: Response) {
+    const { token, ...userWithoutToken } = req.user || {};
+    res.json({
+      status: 200,
+      success: true,
+      data: userWithoutToken,
+      error: null,
+    });
+  }
 }

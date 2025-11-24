@@ -126,4 +126,5 @@ export class UserRepository implements IUserRepository {
       role // ✅ Use validated role
     );
   }
+
 }
