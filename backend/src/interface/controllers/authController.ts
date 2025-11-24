@@ -24,30 +24,7 @@ export class AuthController {
       error: null,
     });
   }
-  async createUser(req: Request, res: Response) {
-    const { email, password, firstName, lastName, role } = req.body;
-
-    // ✅ Create a User instance from request body
-    const user = new User(
-      "", // Empty ID for new users (will be assigned during creation)
-      email,
-      firstName,
-      lastName,
-      role
-    );
-
-    // ✅ Set password on user (if your User class has this method)
-    // If not, modify User to accept password in constructor
-
-    const result = await this.userAuthService.createUser(user, password);
-
-    res.json({
-      status: 201,
-      success: true,
-      data: result.toJSON(),
-      error: null,
-    });
-  }
+  
   async refreshToken(req: Request, res: Response) {
     const { refreshToken } = req.body;
     const result = await this.userAuthService.refreshToken(refreshToken);

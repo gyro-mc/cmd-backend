@@ -1,6 +1,6 @@
 import { User } from "../../domain/entities/User";
-import { AuthError } from "../../domain/errors/AuthError";
-import { DatabaseError } from "../../domain/errors/DatabaseError";
+import { AuthError } from "../../infrastructure/errors/AuthError";
+import { DatabaseError } from "../../infrastructure/errors/DatabaseError";
 import { IAuthRepository } from "../../domain/repositories/IAuthRepository";
 import { IUserRepository } from "../../domain/repositories/IUserRepository";
 import { IUserAuthService } from "../../domain/services/IUserAuthService";
@@ -67,17 +67,5 @@ export class UserAuthService implements IUserAuthService {
       authResponse.expires_in || 3600,
       authResponse.token_type || "Bearer"
     );
-  }
-
-  async createUser(user: User, password: string): Promise<User> {
-    Logger.info("🔐 User creation attempt", { email: user.getEmail() });
-
-    const createdUser = await this.userRepository.createUser(user, password);
-
-    Logger.info("✅ User created successfully", {
-      email: createdUser.getEmail(),
-    });
-
-    return createdUser;
   }
 }

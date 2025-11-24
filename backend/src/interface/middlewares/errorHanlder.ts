@@ -1,9 +1,9 @@
-import { AuthError } from "../../domain/errors/AuthError";
-import { AppError } from "../../domain/errors/AppError";
-import { ErrorTypes } from "../../domain/errors/ErrorTypes";
+import { AuthError } from "../../infrastructure/errors/AuthError";
+import { AppError } from "../../infrastructure/errors/AppError";
+import { ErrorTypes } from "../../infrastructure/errors/ErrorTypes";
 import { Logger } from "../../shared/utils/logger";
-import { ValidationError } from "../../domain/errors/ValidationError";
-import { DatabaseError } from "../../domain/errors/DatabaseError";
+import { ValidationError } from "../../infrastructure/errors/ValidationError";
+import { DatabaseError } from "../../infrastructure/errors/DatabaseError";
 
 export const errorHandler = (err: any, req: any, res: any, next: any) => {
   // Check for AuthError first (more specific)

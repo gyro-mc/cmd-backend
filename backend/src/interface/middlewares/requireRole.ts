@@ -1,4 +1,4 @@
-import { AuthError } from "../../domain/errors/AuthError";
+import { AuthError } from "../../infrastructure/errors/AuthError";
 import { NextFunction, Request, Response } from "express";
 import { Logger } from "../../shared/utils/logger";
 import { AuthRequest } from "./authMiddleware";
