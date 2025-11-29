@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { UserAuthService } from "../../application/services/UserAuthService";
 import { AuthRequest } from "../middlewares/authMiddleware";
-import { User } from "../../domain/entities/User";
 
 export class AuthController {
   constructor(private userAuthService: UserAuthService) {}
@@ -10,12 +9,57 @@ export class AuthController {
     const { email, password } = req.body;
     const result = await this.userAuthService.loginUser(email, password);
 
-    res.json(result.toJSON());
+    // Set access token in HTTP-only cookie (1 hour expiration)
+    res.cookie("accessToken", result.accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 60 * 60 * 1000, // 1 hour
+      path: "/",
+    });
+
+    // Set refresh token in HTTP-only cookie (7 days expiration)
+    res.cookie("refreshToken", result.refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      path: "/api/auth/refresh-token",
+    });
+
+    // Return response with only user info (no tokens)
+    const responseJson = result.toJSON();
+    const { refreshToken, accessToken, ...dataWithoutTokens } =
+      responseJson.data;
+
+    res.json({
+      status: 200,
+      success: true,
+      data: dataWithoutTokens,
+      error: null,
+    });
   }
 
   async logout(req: AuthRequest, res: Response) {
     const userId = req.user?.id;
     await this.userAuthService.logoutUser(userId);
+
+    // Clear access token cookie
+    res.clearCookie("accessToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+    });
+
+    // Clear refresh token cookie
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/api/auth/refresh-token",
+    });
+
     res.json({
       status: 200,
       success: true,
@@ -23,38 +67,58 @@ export class AuthController {
       error: null,
     });
   }
-  async createUser(req: Request, res: Response) {
-    const { email, password, firstName, lastName, role } = req.body;
 
-    // ✅ Create a User instance from request body
-    const user = new User(
-      "", // Empty ID for new users (will be assigned during creation)
-      email,
-      firstName,
-      lastName,
-      role
-    );
-
-    // ✅ Set password on user (if your User class has this method)
-    // If not, modify User to accept password in constructor
-
-    const result = await this.userAuthService.createUser(user, password);
-
-    res.json({
-      status: 201,
-      success: true,
-      data: result.toJSON(),
-      error: null,
-    });
-  }
   async refreshToken(req: Request, res: Response) {
-    const { refreshToken } = req.body;
+    // Get refresh token from cookie instead of body
+    const refreshToken = req.cookies?.refreshToken;
+
+    if (!refreshToken) {
+      return res.status(401).json({
+        status: 401,
+        success: false,
+        data: null,
+        error: {
+          type: "AuthenticationError",
+          message: "Refresh token not found",
+        },
+      });
+    }
+
     const result = await this.userAuthService.refreshToken(refreshToken);
 
+    // Set new access token in cookie (1 hour expiration)
+    res.cookie("accessToken", result["access_token"], {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 60 * 60 * 1000, // 1 hour
+      path: "/",
+    });
+
+    // Set new refresh token in cookie (7 days expiration)
+    res.cookie("refreshToken", result["refresh_token"], {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      path: "/api/auth/refresh-token",
+    });
+
+    // Return minimal response (no tokens in body)
     res.json({
       status: 200,
       success: true,
-      data: result.toJSON(),
+      data: { message: "Tokens refreshed successfully" },
+      error: null,
+    });
+  }
+
+  async getMe(req: AuthRequest, res: Response) {
+    const { token, ...userWithoutToken } = req.user || {};
+    res.json({
+      status: 200,
+      success: true,
+      data: userWithoutToken,
       error: null,
     });
   }
