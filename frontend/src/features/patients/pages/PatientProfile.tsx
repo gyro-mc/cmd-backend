@@ -94,7 +94,7 @@ function CollapsibleSubsection({
 }
 
 interface PatientProfileProps {
-  patientId: string;
+  patientId: number;
   initialEditMode?: boolean;
   onBack?: () => void;
   onDeleted?: () => void;
@@ -110,13 +110,21 @@ export function PatientProfile({
   const [isEditMode, setIsEditMode] = useState(initialEditMode);
   const [isLoading, setIsLoading] = useState(true);
   const [formData, setFormData] = useState<PatientFormData>({
-    name: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    gender: "",
     address: "",
-    phone_number: "",
+    phoneNumber: "",
     profession: "",
-    children_number: 0,
-    family_situation: "",
-    birth_date: "",
+    childrenNumber: 0,
+    familySituation: "",
+    birthDate: "",
+    insuranceNumber: "",
+    emergencyContactName: "",
+    emergencyContactPhone: "",
+    allergies: [],
+    currentMedications: [],
   });
 
   useEffect(() => {
@@ -129,13 +137,21 @@ export function PatientProfile({
       const data = await getPatientById(patientId);
       setPatient(data);
       setFormData({
-        name: data.name,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        gender: data.gender,
         address: data.address,
-        phone_number: data.phone_number,
+        phoneNumber: data.phoneNumber,
         profession: data.profession,
-        children_number: data.children_number,
-        family_situation: data.family_situation,
-        birth_date: data.birth_date,
+        childrenNumber: data.childrenNumber,
+        familySituation: data.familySituation,
+        birthDate: data.birthDate,
+        insuranceNumber: data.insuranceNumber,
+        emergencyContactName: data.emergencyContactName,
+        emergencyContactPhone: data.emergencyContactPhone,
+        allergies: data.allergies,
+        currentMedications: data.currentMedications,
       });
     } catch (error) {
       console.error("Failed to load patient:", error);
@@ -160,13 +176,21 @@ export function PatientProfile({
     if (patient) {
       // Reset form data to original values
       setFormData({
-        name: patient.name,
+        firstName: patient.firstName,
+        lastName: patient.lastName,
+        email: patient.email,
+        gender: patient.gender,
         address: patient.address,
-        phone_number: patient.phone_number,
+        phoneNumber: patient.phoneNumber,
         profession: patient.profession,
-        children_number: patient.children_number,
-        family_situation: patient.family_situation,
-        birth_date: patient.birth_date,
+        childrenNumber: patient.childrenNumber,
+        familySituation: patient.familySituation,
+        birthDate: patient.birthDate,
+        insuranceNumber: patient.insuranceNumber,
+        emergencyContactName: patient.emergencyContactName,
+        emergencyContactPhone: patient.emergencyContactPhone,
+        allergies: patient.allergies,
+        currentMedications: patient.currentMedications,
       });
     }
     setIsEditMode(false);
@@ -176,7 +200,7 @@ export function PatientProfile({
     if (!patient) return;
 
     const confirmed = window.confirm(
-      `Are you sure you want to delete ${patient.name}? This action cannot be undone.`
+      `Are you sure you want to delete ${patient.firstName} ${patient.lastName}? This action cannot be undone.`
     );
 
     if (confirmed) {
@@ -230,7 +254,7 @@ export function PatientProfile({
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-[#101828] text-base font-normal">
-            Patient Details — {patient.name}
+            Patient Details — {patient.firstName} {patient.lastName}
           </h1>
         </div>
         <div className="flex gap-3">
@@ -284,16 +308,71 @@ export function PatientProfile({
         <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Name</Label>
+              <Label htmlFor="firstName">First Name</Label>
               {isEditMode ? (
                 <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) => handleFormChange("name", e.target.value)}
+                  id="firstName"
+                  value={formData.firstName}
+                  onChange={(e) =>
+                    handleFormChange("firstName", e.target.value)
+                  }
                 />
               ) : (
                 <div className="bg-gray-50 h-9 rounded-lg px-3 flex items-center">
-                  <p className="text-sm text-gray-900">{formData.name}</p>
+                  <p className="text-sm text-gray-900">{formData.firstName}</p>
+                </div>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="lastName">Last Name</Label>
+              {isEditMode ? (
+                <Input
+                  id="lastName"
+                  value={formData.lastName}
+                  onChange={(e) =>
+                    handleFormChange("lastName", e.target.value)
+                  }
+                />
+              ) : (
+                <div className="bg-gray-50 h-9 rounded-lg px-3 flex items-center">
+                  <p className="text-sm text-gray-900">{formData.lastName}</p>
+                </div>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              {isEditMode ? (
+                <Input
+                  id="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => handleFormChange("email", e.target.value)}
+                />
+              ) : (
+                <div className="bg-gray-50 h-9 rounded-lg px-3 flex items-center">
+                  <p className="text-sm text-gray-900">{formData.email}</p>
+                </div>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="gender">Gender</Label>
+              {isEditMode ? (
+                <Select
+                  value={formData.gender}
+                  onValueChange={(value) => handleFormChange("gender", value)}
+                >
+                  <SelectTrigger id="gender">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Male">Male</SelectItem>
+                    <SelectItem value="Female">Female</SelectItem>
+                    <SelectItem value="Other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              ) : (
+                <div className="bg-gray-50 h-9 rounded-lg px-3 flex items-center">
+                  <p className="text-sm text-gray-900">{formData.gender}</p>
                 </div>
               )}
             </div>
@@ -303,14 +382,33 @@ export function PatientProfile({
                 <Input
                   id="birthDate"
                   type="date"
-                  value={formData.birth_date}
+                  value={formData.birthDate}
                   onChange={(e) =>
-                    handleFormChange("birth_date", e.target.value)
+                    handleFormChange("birthDate", e.target.value)
                   }
                 />
               ) : (
                 <div className="bg-gray-50 h-9 rounded-lg px-3 flex items-center">
-                  <p className="text-sm text-gray-900">{formData.birth_date}</p>
+                  <p className="text-sm text-gray-900">{formData.birthDate}</p>
+                </div>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="phone">Phone Number</Label>
+              {isEditMode ? (
+                <Input
+                  id="phone"
+                  type="tel"
+                  value={formData.phoneNumber}
+                  onChange={(e) =>
+                    handleFormChange("phoneNumber", e.target.value)
+                  }
+                />
+              ) : (
+                <div className="bg-gray-50 h-9 rounded-lg px-3 flex items-center">
+                  <p className="text-sm text-gray-900">
+                    {formData.phoneNumber}
+                  </p>
                 </div>
               )}
             </div>
@@ -329,20 +427,60 @@ export function PatientProfile({
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="phone">Phone Number</Label>
+              <Label htmlFor="insuranceNumber">Insurance Number</Label>
               {isEditMode ? (
                 <Input
-                  id="phone"
-                  type="tel"
-                  value={formData.phone_number}
+                  id="insuranceNumber"
+                  value={formData.insuranceNumber}
                   onChange={(e) =>
-                    handleFormChange("phone_number", e.target.value)
+                    handleFormChange("insuranceNumber", e.target.value)
                   }
                 />
               ) : (
                 <div className="bg-gray-50 h-9 rounded-lg px-3 flex items-center">
                   <p className="text-sm text-gray-900">
-                    {formData.phone_number}
+                    {formData.insuranceNumber}
+                  </p>
+                </div>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="emergencyContactName">
+                Emergency Contact Name
+              </Label>
+              {isEditMode ? (
+                <Input
+                  id="emergencyContactName"
+                  value={formData.emergencyContactName}
+                  onChange={(e) =>
+                    handleFormChange("emergencyContactName", e.target.value)
+                  }
+                />
+              ) : (
+                <div className="bg-gray-50 h-9 rounded-lg px-3 flex items-center">
+                  <p className="text-sm text-gray-900">
+                    {formData.emergencyContactName}
+                  </p>
+                </div>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="emergencyContactPhone">
+                Emergency Contact Phone
+              </Label>
+              {isEditMode ? (
+                <Input
+                  id="emergencyContactPhone"
+                  type="tel"
+                  value={formData.emergencyContactPhone}
+                  onChange={(e) =>
+                    handleFormChange("emergencyContactPhone", e.target.value)
+                  }
+                />
+              ) : (
+                <div className="bg-gray-50 h-9 rounded-lg px-3 flex items-center">
+                  <p className="text-sm text-gray-900">
+                    {formData.emergencyContactPhone}
                   </p>
                 </div>
               )}
@@ -351,9 +489,9 @@ export function PatientProfile({
               <Label htmlFor="familyStatus">Family Situation</Label>
               {isEditMode ? (
                 <Select
-                  value={formData.family_situation}
+                  value={formData.familySituation}
                   onValueChange={(value) =>
-                    handleFormChange("family_situation", value)
+                    handleFormChange("familySituation", value)
                   }
                 >
                   <SelectTrigger id="familyStatus">
@@ -369,7 +507,7 @@ export function PatientProfile({
               ) : (
                 <div className="bg-gray-50 h-9 rounded-lg px-3 flex items-center">
                   <p className="text-sm text-gray-900">
-                    {formData.family_situation}
+                    {formData.familySituation}
                   </p>
                 </div>
               )}
@@ -380,10 +518,10 @@ export function PatientProfile({
                 <Input
                   id="childrenNumber"
                   type="number"
-                  value={formData.children_number}
+                  value={formData.childrenNumber}
                   onChange={(e) =>
                     handleFormChange(
-                      "children_number",
+                      "childrenNumber",
                       parseInt(e.target.value) || 0
                     )
                   }
@@ -391,7 +529,7 @@ export function PatientProfile({
               ) : (
                 <div className="bg-gray-50 h-9 rounded-lg px-3 flex items-center">
                   <p className="text-sm text-gray-900">
-                    {formData.children_number}
+                    {formData.childrenNumber}
                   </p>
                 </div>
               )}

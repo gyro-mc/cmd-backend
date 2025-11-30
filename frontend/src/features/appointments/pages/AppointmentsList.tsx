@@ -60,10 +60,10 @@ export function AppointmentsList({
   // Filter appointments
   const filteredAppointments = appointments.filter((appointment) => {
     const matchesSearch =
-      appointment.patient_name
+      appointment.patientName
         .toLowerCase()
         .includes(searchTerm.toLowerCase()) ||
-      appointment.doctor_name
+      appointment.doctorName
         .toLowerCase()
         .includes(searchTerm.toLowerCase()) ||
       appointment.reason?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -159,7 +159,7 @@ export function AppointmentsList({
       header: "Patient",
       className: "text-xs",
       render: (appointment) => (
-        <span className="text-sm font-medium">{appointment.patient_name}</span>
+        <span className="text-sm font-medium">{appointment.patientName}</span>
       ),
     },
     {
@@ -167,7 +167,7 @@ export function AppointmentsList({
       header: "Doctor",
       className: "text-xs",
       render: (appointment) => (
-        <span className="text-sm">{appointment.doctor_name}</span>
+        <span className="text-sm">{appointment.doctorName}</span>
       ),
     },
     {
@@ -177,7 +177,7 @@ export function AppointmentsList({
       render: (appointment) => (
         <div className="flex items-center gap-1 text-sm text-gray-600">
           <Clock className="w-3 h-3" />
-          {appointment.estimated_duration} min
+          {appointment.estimatedDuration} min
         </div>
       ),
     },

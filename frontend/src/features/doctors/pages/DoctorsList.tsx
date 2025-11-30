@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Plus, Eye, Edit, Phone, Mail } from "lucide-react";
+import { Plus, Eye, Edit } from "lucide-react";
 import { Button } from "../../../components/ui/button";
 import { PageHeader } from "../../../components/shared/PageHeader";
 import { SearchBar } from "../../../components/shared/SearchBar";
@@ -10,8 +10,8 @@ import { getDoctors } from "../api/doctors.api";
 import type { Doctor } from "../../../types";
 
 interface DoctorsListPageProps {
-  onViewDoctor?: (doctorId: string) => void;
-  onEditDoctor?: (doctorId: string) => void;
+  onViewDoctor?: (doctorId: number) => void;
+  onEditDoctor?: (doctorId: number) => void;
   onAddNew?: () => void;
 }
 
@@ -23,7 +23,7 @@ export function DoctorsList({
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedDoctorId, setSelectedDoctorId] = useState<string | null>(null);
+  const [selectedDoctorId, setSelectedDoctorId] = useState<number | null>(null);
 
   useEffect(() => {
     loadDoctors();
@@ -44,23 +44,23 @@ export function DoctorsList({
 
   // Filter doctors
   const filteredDoctors = doctors.filter((doctor) => {
+    const fullName = `${doctor.firstName} ${doctor.lastName}`.toLowerCase();
     const matchesSearch =
-      doctor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      doctor.specialty.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      doctor.phone_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (doctor.email &&
-        doctor.email.toLowerCase().includes(searchTerm.toLowerCase()));
+      fullName.includes(searchTerm.toLowerCase()) ||
+      doctor.specialization.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      doctor.phoneNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      doctor.email.toLowerCase().includes(searchTerm.toLowerCase());
 
     return matchesSearch;
   });
 
-  const handleViewDoctor = (doctorId: string) => {
+  const handleViewDoctor = (doctorId: number) => {
     if (onViewDoctor) {
       onViewDoctor(doctorId);
     }
   };
 
-  const handleEditDoctor = (doctorId: string) => {
+  const handleEditDoctor = (doctorId: number) => {
     if (onEditDoctor) {
       onEditDoctor(doctorId);
     }
@@ -77,7 +77,7 @@ export function DoctorsList({
       key: "id",
       header: "ID",
       render: (doctor) => (
-        <span className="text-sm text-gray-600">{doctor.id}</span>
+        <span className="font-mono text-xs text-gray-600">#{doctor.id}</span>
       ),
     },
     {
@@ -85,33 +85,39 @@ export function DoctorsList({
       header: "Doctor",
       render: (doctor) => (
         <div>
-          <p className="font-medium text-gray-900 text-sm">{doctor.name}</p>
+          <p className="font-medium text-gray-900 text-sm">
+            {doctor.firstName} {doctor.lastName}
+            {doctor.isMedicalDirector && (
+              <span className="ml-2 text-xs bg-purple-100 text-purple-800 px-2 py-0.5 rounded">
+                Director
+              </span>
+            )}
+          </p>
+          <p className="text-xs text-gray-500">{doctor.email}</p>
         </div>
       ),
     },
     {
-      key: "specialty",
-      header: "Specialty",
-      render: (doctor) => <span className="text-sm">{doctor.specialty}</span>,
+      key: "specialization",
+      header: "Specialization",
+      render: (doctor) => (
+        <span className="text-sm text-gray-600">{doctor.specialization}</span>
+      ),
+    },
+    {
+      key: "salary",
+      header: "Salary",
+      render: (doctor) => (
+        <span className="text-sm text-gray-600">
+          ${doctor.salary.toLocaleString()}
+        </span>
+      ),
     },
     {
       key: "contact",
       header: "Contact",
       render: (doctor) => (
-        <div className="space-y-1">
-          {doctor.phone_number && (
-            <div className="flex items-center gap-1 text-xs text-gray-600">
-              <Phone className="w-3 h-3" />
-              {doctor.phone_number}
-            </div>
-          )}
-          {doctor.email && (
-            <div className="flex items-center gap-1 text-xs text-gray-600">
-              <Mail className="w-3 h-3" />
-              {doctor.email}
-            </div>
-          )}
-        </div>
+        <span className="text-sm text-gray-600">{doctor.phoneNumber}</span>
       ),
     },
     {

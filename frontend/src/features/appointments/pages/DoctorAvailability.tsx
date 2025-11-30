@@ -2,8 +2,8 @@ import { Calendar, Clock, UserCheck } from "lucide-react";
 import { Badge } from "../../../components/ui/badge";
 
 interface DoctorAvailability {
-  doctor_id: string;
-  doctor_name: string;
+  doctorId: string;
+  doctorName: string;
   available_days: string[];
   working_hours: {
     start: string;
@@ -13,8 +13,8 @@ interface DoctorAvailability {
 
 const mockDoctorAvailability: DoctorAvailability[] = [
   {
-    doctor_id: "1",
-    doctor_name: "Dr. Sarah Anderson",
+    doctorId: "1",
+    doctorName: "Dr. Sarah Anderson",
     available_days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
     working_hours: {
       start: "08:00",
@@ -22,8 +22,8 @@ const mockDoctorAvailability: DoctorAvailability[] = [
     },
   },
   {
-    doctor_id: "2",
-    doctor_name: "Dr. Michael Chen",
+    doctorId: "2",
+    doctorName: "Dr. Michael Chen",
     available_days: ["Monday", "Wednesday", "Friday"],
     working_hours: {
       start: "09:00",
@@ -31,8 +31,8 @@ const mockDoctorAvailability: DoctorAvailability[] = [
     },
   },
   {
-    doctor_id: "3",
-    doctor_name: "Dr. Emily Rodriguez",
+    doctorId: "3",
+    doctorName: "Dr. Emily Rodriguez",
     available_days: ["Tuesday", "Thursday", "Saturday"],
     working_hours: {
       start: "10:00",
@@ -40,8 +40,8 @@ const mockDoctorAvailability: DoctorAvailability[] = [
     },
   },
   {
-    doctor_id: "4",
-    doctor_name: "Dr. James Wilson",
+    doctorId: "4",
+    doctorName: "Dr. James Wilson",
     available_days: ["Monday", "Tuesday", "Wednesday", "Thursday"],
     working_hours: {
       start: "08:00",
@@ -49,8 +49,8 @@ const mockDoctorAvailability: DoctorAvailability[] = [
     },
   },
   {
-    doctor_id: "5",
-    doctor_name: "Dr. Lisa Thompson",
+    doctorId: "5",
+    doctorName: "Dr. Lisa Thompson",
     available_days: [
       "Monday",
       "Tuesday",
@@ -103,7 +103,7 @@ export function DoctorAvailability() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {mockDoctorAvailability.map((doctor) => (
           <div
-            key={doctor.doctor_id}
+            key={doctor.doctorId}
             className="bg-white rounded-lg border border-gray-200 overflow-hidden"
           >
             {/* Card Header */}
@@ -111,7 +111,7 @@ export function DoctorAvailability() {
               <div className="flex items-center gap-2">
                 <UserCheck className="w-4 h-4 text-white" />
                 <h2 className="text-base text-white font-normal">
-                  {doctor.doctor_name}
+                  {doctor.doctorName}
                 </h2>
               </div>
             </div>
@@ -193,11 +193,11 @@ export function DoctorAvailability() {
               <tbody>
                 {mockDoctorAvailability.map((doctor) => (
                   <tr
-                    key={doctor.doctor_id}
+                    key={doctor.doctorId}
                     className="border-b border-gray-200 hover:bg-gray-50"
                   >
                     <td className="py-3 px-4 text-sm text-gray-900">
-                      {doctor.doctor_name}
+                      {doctor.doctorName}
                     </td>
                     {daysOfWeek.map((day) => {
                       const isAvailable = doctor.available_days.includes(day);

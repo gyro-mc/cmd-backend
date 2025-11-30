@@ -1,14 +1,24 @@
 // Patient Types
 export interface Patient {
-  id: string;
-  patient_id?: string;
-  name: string;
+  id: number;
+  email: string;
+  firstName: string;
+  lastName: string;
   address: string;
-  phone_number: string;
+  phoneNumber: string;
   profession: string;
-  children_number: number;
-  family_situation: string;
-  birth_date: string;
+  childrenNumber: number;
+  familySituation: string;
+  birthDate: string;
+  gender: string;
+  insuranceNumber?: string;
+  emergencyContactName?: string;
+  emergencyContactPhone?: string;
+  allergies?: string[];
+  currentMedications?: string[];
+  createdAt?: string;
+  updatedAt?: string;
+  // Medical file data (if included in response)
   medicalInfo?: {
     initialNephropathy?: string;
     firstDialysisDate?: string;
@@ -23,13 +33,21 @@ export interface Patient {
 }
 
 export interface PatientFormData {
-  name: string;
+  firstName: string;
+  lastName: string;
+  email: string;
   address: string;
-  phone_number: string;
+  phoneNumber: string;
   profession: string;
-  children_number: number;
-  family_situation: string;
-  birth_date: string;
+  childrenNumber: number;
+  familySituation: string;
+  birthDate: string;
+  gender: string;
+  insuranceNumber?: string;
+  emergencyContactName?: string;
+  emergencyContactPhone?: string;
+  allergies?: string[];
+  currentMedications?: string[];
 }
 
 export interface VascularAccess {
@@ -80,44 +98,83 @@ export interface LabResult {
 
 // Doctor Types
 export interface Doctor {
-  id: string;
-  name: string;
-  specialty: string;
-  phone_number: string;
+  id: number;
+  firstName: string;
+  lastName: string;
   email: string;
+  phoneNumber: string;
+  salary: number;
+  isMedicalDirector: boolean;
+  specialization: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface DoctorFormData {
-  name: string;
-  specialty: string;
-  phone_number: string;
+  firstName: string;
+  lastName: string;
   email: string;
+  phoneNumber: string;
+  salary: number;
+  isMedicalDirector?: boolean;
+  specialization: string;
 }
 
 // Appointment Types
 export interface Appointment {
   id: number;
-  created_at?: string;
-  date: string;
-  estimated_duration?: string;
-  doctor_id: string;
-  patient_id: string;
-  room_number?: number;
-  status?: string;
-  reason?: string;
+  patientId: number;
+  doctorId: number;
+  roomId?: number;
+  createdByReceptionistId?: string;
+  createdByDoctorId?: string;
+  appointmentDate: string;
+  estimatedDuration: number; // in minutes
+  actualDuration?: number;
+  status: "scheduled" | "in-progress" | "completed" | "cancelled" | "no-show";
+  notes?: string;
+  reasonForVisit?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface AppointmentFormData {
-  doctor_id: string;
-  patient_id: string;
-  date: string;
-  estimated_duration: string;
-  room_number: number;
-  reason: string;
-  status: string;
+  patientId: number;
+  doctorId: number;
+  roomId?: number;
+  appointmentDate: string;
+  estimatedDuration: number;
+  status?: "scheduled" | "in-progress" | "completed" | "cancelled" | "no-show";
+  notes?: string;
+  reasonForVisit?: string;
 }
 
 export interface AppointmentWithDetails extends Appointment {
-  doctor_name: string;
-  patient_name: string;
+  doctorName: string;
+  patientName: string;
+  roomNumber?: string;
 }
+
+// API Response Types
+export interface ApiSuccessResponse<T = any> {
+  success: true;
+  status: number;
+  data: T;
+  error: null;
+}
+
+export interface ApiErrorResponse {
+  success: false;
+  status: number;
+  data: null;
+  error: {
+    type: string;
+    subErrorType?: string;
+    context?: any;
+    message: string;
+    details?: any;
+    hint?: string;
+  };
+}
+
+export type ApiResponse<T> = ApiSuccessResponse<T> | ApiErrorResponse;

@@ -29,13 +29,21 @@ export function PatientForm({
   submitLabel = "Register Patient",
 }: PatientFormProps) {
   const [formData, setFormData] = useState<PatientFormData>({
-    name: initialData.name || "",
+    firstName: initialData.firstName || "",
+    lastName: initialData.lastName || "",
+    email: initialData.email || "",
     address: initialData.address || "",
-    phone_number: initialData.phone_number || "",
+    phoneNumber: initialData.phoneNumber || "",
     profession: initialData.profession || "",
-    children_number: initialData.children_number || 0,
-    family_situation: initialData.family_situation || "",
-    birth_date: initialData.birth_date || "",
+    childrenNumber: initialData.childrenNumber || 0,
+    familySituation: initialData.familySituation || "",
+    birthDate: initialData.birthDate || "",
+    gender: initialData.gender || "",
+    insuranceNumber: initialData.insuranceNumber || "",
+    emergencyContactName: initialData.emergencyContactName || "",
+    emergencyContactPhone: initialData.emergencyContactPhone || "",
+    allergies: initialData.allergies || [],
+    currentMedications: initialData.currentMedications || [],
   });
 
   const [errors, setErrors] = useState<
@@ -55,16 +63,30 @@ export function PatientForm({
   const validateForm = () => {
     const newErrors: Partial<Record<keyof PatientFormData, string>> = {};
 
-    if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = "First name is required";
     }
 
-    if (!formData.phone_number.trim()) {
-      newErrors.phone_number = "Phone number is required";
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = "Last name is required";
     }
 
-    if (!formData.birth_date) {
-      newErrors.birth_date = "Birth date is required";
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Email is invalid";
+    }
+
+    if (!formData.phoneNumber.trim()) {
+      newErrors.phoneNumber = "Phone number is required";
+    }
+
+    if (!formData.birthDate) {
+      newErrors.birthDate = "Birth date is required";
+    }
+
+    if (!formData.gender) {
+      newErrors.gender = "Gender is required";
     }
 
     setErrors(newErrors);
@@ -81,24 +103,129 @@ export function PatientForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <FormCard title="Administrative File">
+      <FormCard title="Basic Information">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <Label htmlFor="name">
-              Name <span className="text-red-500">*</span>
+            <Label htmlFor="firstName">
+              First Name <span className="text-red-500">*</span>
             </Label>
             <div className="relative">
               <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
               <Input
-                id="name"
-                placeholder="John Michael Doe"
-                value={formData.name}
-                onChange={(e) => handleInputChange("name", e.target.value)}
-                className={`pl-10 ${errors.name ? "border-red-500" : ""}`}
+                id="firstName"
+                placeholder="John"
+                value={formData.firstName}
+                onChange={(e) =>
+                  handleInputChange("firstName", e.target.value)
+                }
+                className={`pl-10 ${errors.firstName ? "border-red-500" : ""}`}
               />
             </div>
-            {errors.name && (
-              <p className="text-sm text-red-500">{errors.name}</p>
+            {errors.firstName && (
+              <p className="text-sm text-red-500">{errors.firstName}</p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="lastName">
+              Last Name <span className="text-red-500">*</span>
+            </Label>
+            <Input
+              id="lastName"
+              placeholder="Doe"
+              value={formData.lastName}
+              onChange={(e) => handleInputChange("lastName", e.target.value)}
+              className={errors.lastName ? "border-red-500" : ""}
+            />
+            {errors.lastName && (
+              <p className="text-sm text-red-500">{errors.lastName}</p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="email">
+              Email <span className="text-red-500">*</span>
+            </Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="john.doe@example.com"
+              value={formData.email}
+              onChange={(e) => handleInputChange("email", e.target.value)}
+              className={errors.email ? "border-red-500" : ""}
+            />
+            {errors.email && (
+              <p className="text-sm text-red-500">{errors.email}</p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="phoneNumber">
+              Phone Number <span className="text-red-500">*</span>
+            </Label>
+            <div className="relative">
+              <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Input
+                id="phoneNumber"
+                type="tel"
+                placeholder="+1 (555) 000-0000"
+                value={formData.phoneNumber}
+                onChange={(e) =>
+                  handleInputChange("phoneNumber", e.target.value)
+                }
+                className={`pl-10 ${
+                  errors.phoneNumber ? "border-red-500" : ""
+                }`}
+              />
+            </div>
+            {errors.phoneNumber && (
+              <p className="text-sm text-red-500">{errors.phoneNumber}</p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="birthDate">
+              Birth Date <span className="text-red-500">*</span>
+            </Label>
+            <div className="relative">
+              <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Input
+                id="birthDate"
+                type="date"
+                value={formData.birthDate}
+                onChange={(e) =>
+                  handleInputChange("birthDate", e.target.value)
+                }
+                className={`pl-10 ${errors.birthDate ? "border-red-500" : ""}`}
+              />
+            </div>
+            {errors.birthDate && (
+              <p className="text-sm text-red-500">{errors.birthDate}</p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="gender">
+              Gender <span className="text-red-500">*</span>
+            </Label>
+            <Select
+              value={formData.gender}
+              onValueChange={(value) => handleInputChange("gender", value)}
+            >
+              <SelectTrigger
+                id="gender"
+                className={errors.gender ? "border-red-500" : ""}
+              >
+                <SelectValue placeholder="Select gender" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Male">Male</SelectItem>
+                <SelectItem value="Female">Female</SelectItem>
+                <SelectItem value="Other">Other</SelectItem>
+              </SelectContent>
+            </Select>
+            {errors.gender && (
+              <p className="text-sm text-red-500">{errors.gender}</p>
             )}
           </div>
 
@@ -117,30 +244,6 @@ export function PatientForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="phoneNumber">
-              Phone Number <span className="text-red-500">*</span>
-            </Label>
-            <div className="relative">
-              <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <Input
-                id="phoneNumber"
-                type="tel"
-                placeholder="+1 (555) 000-0000"
-                value={formData.phone_number}
-                onChange={(e) =>
-                  handleInputChange("phone_number", e.target.value)
-                }
-                className={`pl-10 ${
-                  errors.phone_number ? "border-red-500" : ""
-                }`}
-              />
-            </div>
-            {errors.phone_number && (
-              <p className="text-sm text-red-500">{errors.phone_number}</p>
-            )}
-          </div>
-
-          <div className="space-y-2">
             <Label htmlFor="profession">Profession</Label>
             <Input
               id="profession"
@@ -151,17 +254,13 @@ export function PatientForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="childrenNumber">Children Number</Label>
+            <Label htmlFor="insuranceNumber">Insurance Number</Label>
             <Input
-              id="childrenNumber"
-              type="number"
-              placeholder="0"
-              value={formData.children_number}
+              id="insuranceNumber"
+              placeholder="INS-123456789"
+              value={formData.insuranceNumber}
               onChange={(e) =>
-                handleInputChange(
-                  "children_number",
-                  parseInt(e.target.value) || 0
-                )
+                handleInputChange("insuranceNumber", e.target.value)
               }
             />
           </div>
@@ -169,9 +268,9 @@ export function PatientForm({
           <div className="space-y-2">
             <Label htmlFor="familySituation">Family Situation</Label>
             <Select
-              value={formData.family_situation}
+              value={formData.familySituation}
               onValueChange={(value) =>
-                handleInputChange("family_situation", value)
+                handleInputChange("familySituation", value)
               }
             >
               <SelectTrigger id="familySituation">
@@ -187,24 +286,50 @@ export function PatientForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="birthDate">
-              Birth Date <span className="text-red-500">*</span>
+            <Label htmlFor="childrenNumber">Children Number</Label>
+            <Input
+              id="childrenNumber"
+              type="number"
+              placeholder="0"
+              value={formData.childrenNumber}
+              onChange={(e) =>
+                handleInputChange(
+                  "childrenNumber",
+                  parseInt(e.target.value) || 0
+                )
+              }
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="emergencyContactName">Emergency Contact Name</Label>
+            <Input
+              id="emergencyContactName"
+              placeholder="Jane Doe"
+              value={formData.emergencyContactName}
+              onChange={(e) =>
+                handleInputChange("emergencyContactName", e.target.value)
+              }
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="emergencyContactPhone">
+              Emergency Contact Phone
             </Label>
             <div className="relative">
-              <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
               <Input
-                id="birthDate"
-                type="date"
-                value={formData.birth_date}
+                id="emergencyContactPhone"
+                type="tel"
+                placeholder="+1 (555) 000-0000"
+                value={formData.emergencyContactPhone}
                 onChange={(e) =>
-                  handleInputChange("birth_date", e.target.value)
+                  handleInputChange("emergencyContactPhone", e.target.value)
                 }
-                className={`pl-10 ${errors.birth_date ? "border-red-500" : ""}`}
+                className="pl-10"
               />
             </div>
-            {errors.birth_date && (
-              <p className="text-sm text-red-500">{errors.birth_date}</p>
-            )}
           </div>
         </div>
       </FormCard>

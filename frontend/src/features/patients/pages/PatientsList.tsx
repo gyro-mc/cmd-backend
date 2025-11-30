@@ -10,9 +10,21 @@ import type { Column } from "../../../components/shared/DataTable";
 import { getPatients } from "../api/patients.api";
 import type { Patient } from "../../../types";
 
+// Utility function to calculate age from birth date
+const calculateAge = (birthDate: string): number => {
+  const today = new Date();
+  const birth = new Date(birthDate);
+  let age = today.getFullYear() - birth.getFullYear();
+  const monthDiff = today.getMonth() - birth.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+    age--;
+  }
+  return age;
+};
+
 interface PatientsListPageProps {
-  onViewPatient?: (patientId: string) => void;
-  onEditPatient?: (patientId: string) => void;
+  onViewPatient?: (patientId: number) => void;
+  onEditPatient?: (patientId: number) => void;
   onRegisterNew?: () => void;
 }
 
@@ -24,7 +36,7 @@ export function PatientsList({
   const [patients, setPatients] = useState<Patient[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedPatientId, setSelectedPatientId] = useState<string | null>(
+  const [selectedPatientId, setSelectedPatientId] = useState<number | null>(
     null
   );
 
@@ -47,21 +59,23 @@ export function PatientsList({
 
   // Filter patients
   const filteredPatients = patients.filter((patient) => {
+    const fullName = `${patient.firstName} ${patient.lastName}`.toLowerCase();
     const matchesSearch =
-      patient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      patient.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      patient.phone_number.toLowerCase().includes(searchTerm.toLowerCase());
+      fullName.includes(searchTerm.toLowerCase()) ||
+      patient.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      patient.id.toString().includes(searchTerm) ||
+      patient.phoneNumber.toLowerCase().includes(searchTerm.toLowerCase());
 
     return matchesSearch;
   });
 
-  const handleViewPatient = (patientId: string) => {
+  const handleViewPatient = (patientId: number) => {
     if (onViewPatient) {
       onViewPatient(patientId);
     }
   };
 
-  const handleEditPatient = (patientId: string) => {
+  const handleEditPatient = (patientId: number) => {
     if (onEditPatient) {
       onEditPatient(patientId);
     }
@@ -75,33 +89,39 @@ export function PatientsList({
 
   const patientColumns: Column<Patient>[] = [
     {
+      key: "id",
+      header: "ID",
+      render: (patient) => (
+        <span className="font-mono text-xs text-gray-600">#{patient.id}</span>
+      ),
+    },
+    {
       key: "name",
       header: "Patient",
       render: (patient) => (
         <div>
-          <p className="font-medium text-gray-900 text-sm">{patient.name}</p>
-          {patient.profession && (
-            <p className="text-xs text-gray-500">{patient.profession}</p>
-          )}
+          <p className="font-medium text-gray-900 text-sm">
+            {patient.firstName} {patient.lastName}
+          </p>
+          <p className="text-xs text-gray-500">{patient.email}</p>
         </div>
-      ),
-    },
-    {
-      key: "patient_id",
-      header: "Patient ID",
-      render: (patient) => (
-        <span className="font-mono text-xs">{patient.patient_id}</span>
       ),
     },
     {
       key: "gender",
       header: "Gender",
-      render: () => <span className="text-sm">-</span>,
+      render: (patient) => (
+        <span className="text-sm text-gray-600">{patient.gender}</span>
+      ),
     },
     {
       key: "age",
       header: "Age",
-      render: () => <span className="text-sm">-</span>,
+      render: (patient) => (
+        <span className="text-sm text-gray-600">
+          {calculateAge(patient.birthDate)}
+        </span>
+      ),
     },
     {
       key: "contact",
@@ -109,7 +129,7 @@ export function PatientsList({
       render: (patient) => (
         <div className="flex items-center gap-1 text-xs text-gray-600">
           <Phone className="w-3 h-3" />
-          {patient.phone_number}
+          {patient.phoneNumber}
         </div>
       ),
     },

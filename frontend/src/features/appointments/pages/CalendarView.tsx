@@ -12,40 +12,40 @@ import type { AppointmentWithDetails } from "../../../types";
 const mockAppointments: AppointmentWithDetails[] = [
   {
     id: 1,
-    created_at: "2025-12-05T10:00:00",
+    createdAt: "2025-12-05T10:00:00",
     date: "2025-12-05",
-    estimated_duration: "30",
-    doctor_id: "1",
-    doctor_name: "Dr. Sarah Anderson",
-    patient_id: "HD-2024-1234",
-    patient_name: "John Doe",
-    room_number: 101,
+    estimatedDuration: "30",
+    doctorId: "1",
+    doctorName: "Dr. Sarah Anderson",
+    patientId: "HD-2024-1234",
+    patientName: "John Doe",
+    roomNumber: 101,
     status: "scheduled",
     reason: "Regular checkup",
   },
   {
     id: 2,
-    created_at: "2025-12-05T14:00:00",
+    createdAt: "2025-12-05T14:00:00",
     date: "2025-12-05",
-    estimated_duration: "45",
-    doctor_id: "2",
-    doctor_name: "Dr. Michael Chen",
-    patient_id: "HD-2024-1235",
-    patient_name: "Sarah Johnson",
-    room_number: 102,
+    estimatedDuration: "45",
+    doctorId: "2",
+    doctorName: "Dr. Michael Chen",
+    patientId: "HD-2024-1235",
+    patientName: "Sarah Johnson",
+    roomNumber: 102,
     status: "scheduled",
     reason: "Follow-up",
   },
   {
     id: 3,
-    created_at: "2025-12-10T09:00:00",
+    createdAt: "2025-12-10T09:00:00",
     date: "2025-12-10",
-    estimated_duration: "30",
-    doctor_id: "3",
-    doctor_name: "Dr. Emily Rodriguez",
-    patient_id: "HD-2024-1236",
-    patient_name: "Robert Martinez",
-    room_number: 103,
+    estimatedDuration: "30",
+    doctorId: "3",
+    doctorName: "Dr. Emily Rodriguez",
+    patientId: "HD-2024-1236",
+    patientName: "Robert Martinez",
+    roomNumber: 103,
     status: "scheduled",
     reason: "Lab results review",
   },
@@ -134,9 +134,9 @@ export function CalendarView({
                     }
                     className="text-xs p-1 rounded bg-[#1C8CA8] text-white cursor-pointer hover:bg-[#157A93] truncate"
                   >
-                    <div className="font-medium">{apt.patient_name}</div>
+                    <div className="font-medium">{apt.patientName}</div>
                     <div className="text-[10px] opacity-90">
-                      {apt.doctor_name}
+                      {apt.doctorName}
                     </div>
                   </div>
                 ))}

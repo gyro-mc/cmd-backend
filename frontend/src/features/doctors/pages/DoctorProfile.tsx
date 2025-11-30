@@ -13,7 +13,7 @@ import { getDoctorById, updateDoctor, deleteDoctor } from "../api/doctors.api";
 import type { Doctor, DoctorFormData } from "../../../types";
 
 interface DoctorProfileProps {
-  doctorId: string;
+  doctorId: number;
   initialEditMode?: boolean;
   onBack?: () => void;
   onDeleted?: () => void;
@@ -29,10 +29,13 @@ export function DoctorProfile({
   const [isEditMode, setIsEditMode] = useState(initialEditMode);
   const [isLoading, setIsLoading] = useState(true);
   const [formData, setFormData] = useState<DoctorFormData>({
-    name: "",
-    specialty: "",
-    phone_number: "",
+    firstName: "",
+    lastName: "",
     email: "",
+    phoneNumber: "",
+    specialization: "",
+    salary: 0,
+    isMedicalDirector: false,
   });
 
   useEffect(() => {
@@ -45,10 +48,13 @@ export function DoctorProfile({
       const data = await getDoctorById(doctorId);
       setDoctor(data);
       setFormData({
-        name: data.name,
-        specialty: data.specialty,
-        phone_number: data.phone_number,
+        firstName: data.firstName,
+        lastName: data.lastName,
         email: data.email,
+        phoneNumber: data.phoneNumber,
+        specialization: data.specialization,
+        salary: data.salary,
+        isMedicalDirector: data.isMedicalDirector,
       });
     } catch (error) {
       console.error("Failed to load doctor:", error);
@@ -73,10 +79,13 @@ export function DoctorProfile({
     if (doctor) {
       // Reset form data to original values
       setFormData({
-        name: doctor.name,
-        specialty: doctor.specialty,
-        phone_number: doctor.phone_number,
+        firstName: doctor.firstName,
+        lastName: doctor.lastName,
         email: doctor.email,
+        phoneNumber: doctor.phoneNumber,
+        specialization: doctor.specialization,
+        salary: doctor.salary,
+        isMedicalDirector: doctor.isMedicalDirector,
       });
     }
     setIsEditMode(false);
@@ -86,7 +95,7 @@ export function DoctorProfile({
     if (!doctor) return;
 
     const confirmed = window.confirm(
-      `Are you sure you want to delete ${doctor.name}? This action cannot be undone.`
+      `Are you sure you want to delete ${doctor.firstName} ${doctor.lastName}? This action cannot be undone.`
     );
 
     if (confirmed) {
@@ -102,7 +111,10 @@ export function DoctorProfile({
     }
   };
 
-  const handleFormChange = (field: keyof DoctorFormData, value: string) => {
+  const handleFormChange = (
+    field: keyof DoctorFormData,
+    value: string | number | boolean
+  ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
