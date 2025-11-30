@@ -1,8 +1,8 @@
 import { Monitor, Hash, MapPin, Calendar, Edit, Power } from "lucide-react"
 import { AlertCircle } from "lucide-react"
 import { useState } from "react"
-import DeactivateModal from "./DeactivateModal" // Adjust path as needed
-import AddMachineModal from "./AddMachineModal" // Adjust path as needed
+import DeactivateModal from "./DeactivateModal" 
+import AddMachineModal from "./AddMachineModal" 
 
 interface Machine { 
   id: string
