@@ -14,7 +14,10 @@ interface DoctorCardProps {
   onSave: () => void;
   onCancel: () => void;
   onDelete: () => void;
-  onFormChange: (field: keyof DoctorFormData, value: string) => void;
+  onFormChange: (
+    field: keyof DoctorFormData,
+    value: string | number | boolean
+  ) => void;
 }
 
 export function DoctorCard({
@@ -30,7 +33,7 @@ export function DoctorCard({
   return (
     <>
       <PageHeader
-        title={`Doctor Details — ${doctor.name}`}
+        title={`Doctor Details — ${doctor.firstName} ${doctor.lastName}`}
         actions={
           isEditMode ? (
             <>
@@ -75,46 +78,31 @@ export function DoctorCard({
       <FormCard title="Doctor Information">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="name">Name</Label>
+            <Label htmlFor="firstName">First Name</Label>
             {isEditMode ? (
               <Input
-                id="name"
-                value={formData.name}
-                onChange={(e) => onFormChange("name", e.target.value)}
+                id="firstName"
+                value={formData.firstName}
+                onChange={(e) => onFormChange("firstName", e.target.value)}
               />
             ) : (
               <div className="bg-gray-50 h-9 rounded-lg px-3 flex items-center">
-                <p className="text-sm text-gray-900">{formData.name}</p>
+                <p className="text-sm text-gray-900">{formData.firstName}</p>
               </div>
             )}
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="specialty">Specialty</Label>
+            <Label htmlFor="lastName">Last Name</Label>
             {isEditMode ? (
               <Input
-                id="specialty"
-                value={formData.specialty}
-                onChange={(e) => onFormChange("specialty", e.target.value)}
+                id="lastName"
+                value={formData.lastName}
+                onChange={(e) => onFormChange("lastName", e.target.value)}
               />
             ) : (
               <div className="bg-gray-50 h-9 rounded-lg px-3 flex items-center">
-                <p className="text-sm text-gray-900">{formData.specialty}</p>
-              </div>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="phone">Phone Number</Label>
-            {isEditMode ? (
-              <Input
-                id="phone"
-                value={formData.phone_number}
-                onChange={(e) => onFormChange("phone_number", e.target.value)}
-              />
-            ) : (
-              <div className="bg-gray-50 h-9 rounded-lg px-3 flex items-center">
-                <p className="text-sm text-gray-900">{formData.phone_number}</p>
+                <p className="text-sm text-gray-900">{formData.lastName}</p>
               </div>
             )}
           </div>
@@ -131,6 +119,87 @@ export function DoctorCard({
             ) : (
               <div className="bg-gray-50 h-9 rounded-lg px-3 flex items-center">
                 <p className="text-sm text-gray-900">{formData.email}</p>
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="phone">Phone Number</Label>
+            {isEditMode ? (
+              <Input
+                id="phone"
+                value={formData.phoneNumber}
+                onChange={(e) => onFormChange("phoneNumber", e.target.value)}
+              />
+            ) : (
+              <div className="bg-gray-50 h-9 rounded-lg px-3 flex items-center">
+                <p className="text-sm text-gray-900">{formData.phoneNumber}</p>
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="specialization">Specialization</Label>
+            {isEditMode ? (
+              <Input
+                id="specialization"
+                value={formData.specialization}
+                onChange={(e) => onFormChange("specialization", e.target.value)}
+              />
+            ) : (
+              <div className="bg-gray-50 h-9 rounded-lg px-3 flex items-center">
+                <p className="text-sm text-gray-900">
+                  {formData.specialization}
+                </p>
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="salary">Salary</Label>
+            {isEditMode ? (
+              <Input
+                id="salary"
+                type="number"
+                value={formData.salary}
+                onChange={(e) =>
+                  onFormChange("salary", parseFloat(e.target.value) || 0)
+                }
+              />
+            ) : (
+              <div className="bg-gray-50 h-9 rounded-lg px-3 flex items-center">
+                <p className="text-sm text-gray-900">
+                  ${formData.salary.toLocaleString()}
+                </p>
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-2 flex items-center gap-2 pt-7">
+            {isEditMode ? (
+              <>
+                <input
+                  id="isMedicalDirector"
+                  type="checkbox"
+                  checked={formData.isMedicalDirector}
+                  onChange={(e) =>
+                    onFormChange("isMedicalDirector", e.target.checked)
+                  }
+                  className="w-4 h-4 rounded border-gray-300"
+                />
+                <Label htmlFor="isMedicalDirector" className="cursor-pointer">
+                  Medical Director
+                </Label>
+              </>
+            ) : (
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={formData.isMedicalDirector}
+                  disabled
+                  className="w-4 h-4 rounded border-gray-300"
+                />
+                <Label>Medical Director</Label>
               </div>
             )}
           </div>

@@ -153,16 +153,16 @@ export function AppointmentCard({
             {isEditMode ? (
               <Input
                 id="duration"
-                value={formData.estimated_duration}
+                value={formData.estimatedDuration}
                 onChange={(e) =>
-                  onFormChange("estimated_duration", e.target.value)
+                  onFormChange("estimatedDuration", e.target.value)
                 }
               />
             ) : (
               <div className="bg-gray-50 h-9 rounded-lg px-3 flex items-center">
                 <Clock className="w-4 h-4 mr-2 text-gray-400" />
                 <p className="text-sm text-gray-900">
-                  {formData.estimated_duration} min
+                  {formData.estimatedDuration} min
                 </p>
               </div>
             )}
@@ -195,8 +195,8 @@ export function AppointmentCard({
             <Label htmlFor="doctor">Doctor</Label>
             {isEditMode ? (
               <Select
-                value={formData.doctor_id}
-                onValueChange={(value) => onFormChange("doctor_id", value)}
+                value={formData.doctorId}
+                onValueChange={(value) => onFormChange("doctorId", value)}
               >
                 <SelectTrigger id="doctor">
                   <SelectValue placeholder="Select doctor" />
@@ -213,7 +213,7 @@ export function AppointmentCard({
               <div className="bg-gray-50 h-9 rounded-lg px-3 flex items-center">
                 <UserCheck className="w-4 h-4 mr-2 text-gray-400" />
                 <p className="text-sm text-gray-900">
-                  {appointment.doctor_name}
+                  {appointment.doctorName}
                 </p>
               </div>
             )}
@@ -223,8 +223,8 @@ export function AppointmentCard({
             <Label htmlFor="patient">Patient</Label>
             {isEditMode ? (
               <Select
-                value={formData.patient_id}
-                onValueChange={(value) => onFormChange("patient_id", value)}
+                value={formData.patientId}
+                onValueChange={(value) => onFormChange("patientId", value)}
               >
                 <SelectTrigger id="patient">
                   <SelectValue placeholder="Select patient" />
@@ -241,7 +241,7 @@ export function AppointmentCard({
               <div className="bg-gray-50 h-9 rounded-lg px-3 flex items-center">
                 <User className="w-4 h-4 mr-2 text-gray-400" />
                 <p className="text-sm text-gray-900">
-                  {appointment.patient_name}
+                  {appointment.patientName}
                 </p>
               </div>
             )}
@@ -253,14 +253,14 @@ export function AppointmentCard({
               <Input
                 id="room"
                 type="number"
-                value={formData.room_number}
+                value={formData.roomNumber}
                 onChange={(e) =>
-                  onFormChange("room_number", parseInt(e.target.value) || 0)
+                  onFormChange("roomNumber", parseInt(e.target.value) || 0)
                 }
               />
             ) : (
               <div className="bg-gray-50 h-9 rounded-lg px-3 flex items-center">
-                <p className="text-sm text-gray-900">{formData.room_number}</p>
+                <p className="text-sm text-gray-900">{formData.roomNumber}</p>
               </div>
             )}
           </div>

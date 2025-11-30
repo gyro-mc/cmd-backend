@@ -47,10 +47,10 @@ export function AppointmentDetails({
   );
   const [formData, setFormData] = useState<AppointmentFormData>({
     date: "",
-    estimated_duration: "",
-    doctor_id: "",
-    patient_id: "",
-    room_number: 0,
+    estimatedDuration: "",
+    doctorId: "",
+    patientId: "",
+    roomNumber: 0,
     status: "scheduled",
     reason: "",
   });
@@ -73,10 +73,10 @@ export function AppointmentDetails({
       setPatients(patientsData.map((p) => ({ id: p.id, name: p.name })));
       setFormData({
         date: appointmentData.date,
-        estimated_duration: appointmentData.estimated_duration || "",
-        doctor_id: appointmentData.doctor_id,
-        patient_id: appointmentData.patient_id,
-        room_number: appointmentData.room_number || 0,
+        estimatedDuration: appointmentData.estimatedDuration || "",
+        doctorId: appointmentData.doctorId,
+        patientId: appointmentData.patientId,
+        roomNumber: appointmentData.roomNumber || 0,
         status: appointmentData.status || "scheduled",
         reason: appointmentData.reason || "",
       });
@@ -104,10 +104,10 @@ export function AppointmentDetails({
       // Reset form data to original values
       setFormData({
         date: appointment.date,
-        estimated_duration: appointment.estimated_duration || "",
-        doctor_id: appointment.doctor_id,
-        patient_id: appointment.patient_id,
-        room_number: appointment.room_number || 0,
+        estimatedDuration: appointment.estimatedDuration || "",
+        doctorId: appointment.doctorId,
+        patientId: appointment.patientId,
+        roomNumber: appointment.roomNumber || 0,
         status: appointment.status || "scheduled",
         reason: appointment.reason || "",
       });

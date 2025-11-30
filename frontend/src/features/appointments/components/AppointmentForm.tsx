@@ -35,10 +35,10 @@ export function AppointmentForm({
 }: AppointmentFormProps) {
   const [formData, setFormData] = useState<AppointmentFormData>({
     date: initialData.date || "",
-    estimated_duration: initialData.estimated_duration || "",
-    doctor_id: initialData.doctor_id || "",
-    patient_id: initialData.patient_id || "",
-    room_number: initialData.room_number || 0,
+    estimatedDuration: initialData.estimatedDuration || "",
+    doctorId: initialData.doctorId || "",
+    patientId: initialData.patientId || "",
+    roomNumber: initialData.roomNumber || 0,
     status: initialData.status || "scheduled",
     reason: initialData.reason || "",
   });
@@ -64,16 +64,16 @@ export function AppointmentForm({
       newErrors.date = "Date is required";
     }
 
-    if (!formData.estimated_duration) {
-      newErrors.estimated_duration = "Duration is required";
+    if (!formData.estimatedDuration) {
+      newErrors.estimatedDuration = "Duration is required";
     }
 
-    if (!formData.doctor_id) {
-      newErrors.doctor_id = "Doctor is required";
+    if (!formData.doctorId) {
+      newErrors.doctorId = "Doctor is required";
     }
 
-    if (!formData.patient_id) {
-      newErrors.patient_id = "Patient is required";
+    if (!formData.patientId) {
+      newErrors.patientId = "Patient is required";
     }
 
     if (!formData.reason.trim()) {
@@ -126,18 +126,18 @@ export function AppointmentForm({
                 id="estimatedDuration"
                 type="text"
                 placeholder="30"
-                value={formData.estimated_duration}
+                value={formData.estimatedDuration}
                 onChange={(e) =>
-                  handleInputChange("estimated_duration", e.target.value)
+                  handleInputChange("estimatedDuration", e.target.value)
                 }
                 className={`pl-10 ${
-                  errors.estimated_duration ? "border-red-500" : ""
+                  errors.estimatedDuration ? "border-red-500" : ""
                 }`}
               />
             </div>
-            {errors.estimated_duration && (
+            {errors.estimatedDuration && (
               <p className="text-sm text-red-500">
-                {errors.estimated_duration}
+                {errors.estimatedDuration}
               </p>
             )}
           </div>
@@ -147,12 +147,12 @@ export function AppointmentForm({
               Doctor <span className="text-red-500">*</span>
             </Label>
             <Select
-              value={formData.doctor_id}
-              onValueChange={(value) => handleInputChange("doctor_id", value)}
+              value={formData.doctorId}
+              onValueChange={(value) => handleInputChange("doctorId", value)}
             >
               <SelectTrigger
                 id="doctor"
-                className={errors.doctor_id ? "border-red-500" : ""}
+                className={errors.doctorId ? "border-red-500" : ""}
               >
                 <SelectValue placeholder="Select doctor" />
               </SelectTrigger>
@@ -164,8 +164,8 @@ export function AppointmentForm({
                 ))}
               </SelectContent>
             </Select>
-            {errors.doctor_id && (
-              <p className="text-sm text-red-500">{errors.doctor_id}</p>
+            {errors.doctorId && (
+              <p className="text-sm text-red-500">{errors.doctorId}</p>
             )}
           </div>
 
@@ -174,12 +174,12 @@ export function AppointmentForm({
               Patient <span className="text-red-500">*</span>
             </Label>
             <Select
-              value={formData.patient_id}
-              onValueChange={(value) => handleInputChange("patient_id", value)}
+              value={formData.patientId}
+              onValueChange={(value) => handleInputChange("patientId", value)}
             >
               <SelectTrigger
                 id="patient"
-                className={errors.patient_id ? "border-red-500" : ""}
+                className={errors.patientId ? "border-red-500" : ""}
               >
                 <SelectValue placeholder="Select patient" />
               </SelectTrigger>
@@ -191,8 +191,8 @@ export function AppointmentForm({
                 ))}
               </SelectContent>
             </Select>
-            {errors.patient_id && (
-              <p className="text-sm text-red-500">{errors.patient_id}</p>
+            {errors.patientId && (
+              <p className="text-sm text-red-500">{errors.patientId}</p>
             )}
           </div>
 
@@ -202,9 +202,9 @@ export function AppointmentForm({
               id="roomNumber"
               type="number"
               placeholder="101"
-              value={formData.room_number}
+              value={formData.roomNumber}
               onChange={(e) =>
-                handleInputChange("room_number", parseInt(e.target.value) || 0)
+                handleInputChange("roomNumber", parseInt(e.target.value) || 0)
               }
             />
           </div>

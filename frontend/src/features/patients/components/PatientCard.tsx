@@ -102,12 +102,12 @@ export function PatientCard({
               <Input
                 id="birthDate"
                 type="date"
-                value={formData.birth_date}
-                onChange={(e) => onFormChange("birth_date", e.target.value)}
+                value={formData.birthDate}
+                onChange={(e) => onFormChange("birthDate", e.target.value)}
               />
             ) : (
               <div className="bg-gray-50 h-9 rounded-lg px-3 flex items-center">
-                <p className="text-sm text-gray-900">{formData.birth_date}</p>
+                <p className="text-sm text-gray-900">{formData.birthDate}</p>
               </div>
             )}
           </div>
@@ -132,12 +132,12 @@ export function PatientCard({
             {isEditMode ? (
               <Input
                 id="phone"
-                value={formData.phone_number}
-                onChange={(e) => onFormChange("phone_number", e.target.value)}
+                value={formData.phoneNumber}
+                onChange={(e) => onFormChange("phoneNumber", e.target.value)}
               />
             ) : (
               <div className="bg-gray-50 h-9 rounded-lg px-3 flex items-center">
-                <p className="text-sm text-gray-900">{formData.phone_number}</p>
+                <p className="text-sm text-gray-900">{formData.phoneNumber}</p>
               </div>
             )}
           </div>
@@ -146,9 +146,9 @@ export function PatientCard({
             <Label htmlFor="familySituation">Family Situation</Label>
             {isEditMode ? (
               <Select
-                value={formData.family_situation}
+                value={formData.familySituation}
                 onValueChange={(value) =>
-                  onFormChange("family_situation", value)
+                  onFormChange("familySituation", value)
                 }
               >
                 <SelectTrigger id="familySituation">
@@ -164,7 +164,7 @@ export function PatientCard({
             ) : (
               <div className="bg-gray-50 h-9 rounded-lg px-3 flex items-center">
                 <p className="text-sm text-gray-900">
-                  {formData.family_situation}
+                  {formData.familySituation}
                 </p>
               </div>
             )}
@@ -176,15 +176,15 @@ export function PatientCard({
               <Input
                 id="childrenNumber"
                 type="number"
-                value={formData.children_number}
+                value={formData.childrenNumber}
                 onChange={(e) =>
-                  onFormChange("children_number", parseInt(e.target.value) || 0)
+                  onFormChange("childrenNumber", parseInt(e.target.value) || 0)
                 }
               />
             ) : (
               <div className="bg-gray-50 h-9 rounded-lg px-3 flex items-center">
                 <p className="text-sm text-gray-900">
-                  {formData.children_number}
+                  {formData.childrenNumber}
                 </p>
               </div>
             )}

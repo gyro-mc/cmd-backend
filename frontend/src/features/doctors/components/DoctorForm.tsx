@@ -22,17 +22,23 @@ export function DoctorForm({
   submitLabel = "Add Doctor",
 }: DoctorFormProps) {
   const [formData, setFormData] = useState<DoctorFormData>({
-    name: initialData.name || "",
-    specialty: initialData.specialty || "",
-    phone_number: initialData.phone_number || "",
+    firstName: initialData.firstName || "",
+    lastName: initialData.lastName || "",
     email: initialData.email || "",
+    phoneNumber: initialData.phoneNumber || "",
+    specialization: initialData.specialization || "",
+    salary: initialData.salary || 0,
+    isMedicalDirector: initialData.isMedicalDirector || false,
   });
 
   const [errors, setErrors] = useState<
     Partial<Record<keyof DoctorFormData, string>>
   >({});
 
-  const handleInputChange = (field: keyof DoctorFormData, value: string) => {
+  const handleInputChange = (
+    field: keyof DoctorFormData,
+    value: string | number | boolean
+  ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: undefined }));
@@ -42,16 +48,30 @@ export function DoctorForm({
   const validateForm = () => {
     const newErrors: Partial<Record<keyof DoctorFormData, string>> = {};
 
-    if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = "First name is required";
     }
 
-    if (!formData.specialty.trim()) {
-      newErrors.specialty = "Specialty is required";
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = "Last name is required";
     }
 
-    if (!formData.phone_number.trim()) {
-      newErrors.phone_number = "Phone number is required";
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Invalid email format";
+    }
+
+    if (!formData.phoneNumber.trim()) {
+      newErrors.phoneNumber = "Phone number is required";
+    }
+
+    if (!formData.specialization.trim()) {
+      newErrors.specialization = "Specialization is required";
+    }
+
+    if (formData.salary <= 0) {
+      newErrors.salary = "Salary must be greater than 0";
     }
 
     setErrors(newErrors);
@@ -71,40 +91,62 @@ export function DoctorForm({
       <FormCard title="Doctor Information">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <Label htmlFor="name">
-              Name <span className="text-red-500">*</span>
+            <Label htmlFor="firstName">
+              First Name <span className="text-red-500">*</span>
             </Label>
             <div className="relative">
               <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
               <Input
-                id="name"
-                placeholder="Dr. John Doe"
-                value={formData.name}
-                onChange={(e) => handleInputChange("name", e.target.value)}
-                className={`pl-10 ${errors.name ? "border-red-500" : ""}`}
+                id="firstName"
+                placeholder="John"
+                value={formData.firstName}
+                onChange={(e) =>
+                  handleInputChange("firstName", e.target.value)
+                }
+                className={`pl-10 ${errors.firstName ? "border-red-500" : ""}`}
               />
             </div>
-            {errors.name && (
-              <p className="text-sm text-red-500">{errors.name}</p>
+            {errors.firstName && (
+              <p className="text-sm text-red-500">{errors.firstName}</p>
             )}
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="specialty">
-              Specialty <span className="text-red-500">*</span>
+            <Label htmlFor="lastName">
+              Last Name <span className="text-red-500">*</span>
             </Label>
             <div className="relative">
-              <Stethoscope className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
               <Input
-                id="specialty"
-                placeholder="Cardiology"
-                value={formData.specialty}
-                onChange={(e) => handleInputChange("specialty", e.target.value)}
-                className={`pl-10 ${errors.specialty ? "border-red-500" : ""}`}
+                id="lastName"
+                placeholder="Doe"
+                value={formData.lastName}
+                onChange={(e) => handleInputChange("lastName", e.target.value)}
+                className={`pl-10 ${errors.lastName ? "border-red-500" : ""}`}
               />
             </div>
-            {errors.specialty && (
-              <p className="text-sm text-red-500">{errors.specialty}</p>
+            {errors.lastName && (
+              <p className="text-sm text-red-500">{errors.lastName}</p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="email">
+              Email <span className="text-red-500">*</span>
+            </Label>
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Input
+                id="email"
+                type="email"
+                placeholder="doctor@example.com"
+                value={formData.email}
+                onChange={(e) => handleInputChange("email", e.target.value)}
+                className={`pl-10 ${errors.email ? "border-red-500" : ""}`}
+              />
+            </div>
+            {errors.email && (
+              <p className="text-sm text-red-500">{errors.email}</p>
             )}
           </div>
 
@@ -118,33 +160,75 @@ export function DoctorForm({
                 id="phoneNumber"
                 type="tel"
                 placeholder="+1 (555) 000-0000"
-                value={formData.phone_number}
+                value={formData.phoneNumber}
                 onChange={(e) =>
-                  handleInputChange("phone_number", e.target.value)
+                  handleInputChange("phoneNumber", e.target.value)
                 }
                 className={`pl-10 ${
-                  errors.phone_number ? "border-red-500" : ""
+                  errors.phoneNumber ? "border-red-500" : ""
                 }`}
               />
             </div>
-            {errors.phone_number && (
-              <p className="text-sm text-red-500">{errors.phone_number}</p>
+            {errors.phoneNumber && (
+              <p className="text-sm text-red-500">{errors.phoneNumber}</p>
             )}
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="specialization">
+              Specialization <span className="text-red-500">*</span>
+            </Label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Stethoscope className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
               <Input
-                id="email"
-                type="email"
-                placeholder="doctor@example.com"
-                value={formData.email}
-                onChange={(e) => handleInputChange("email", e.target.value)}
-                className="pl-10"
+                id="specialization"
+                placeholder="Nephrology"
+                value={formData.specialization}
+                onChange={(e) =>
+                  handleInputChange("specialization", e.target.value)
+                }
+                className={`pl-10 ${
+                  errors.specialization ? "border-red-500" : ""
+                }`}
               />
             </div>
+            {errors.specialization && (
+              <p className="text-sm text-red-500">{errors.specialization}</p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="salary">
+              Salary <span className="text-red-500">*</span>
+            </Label>
+            <Input
+              id="salary"
+              type="number"
+              placeholder="150000"
+              value={formData.salary}
+              onChange={(e) =>
+                handleInputChange("salary", parseFloat(e.target.value) || 0)
+              }
+              className={errors.salary ? "border-red-500" : ""}
+            />
+            {errors.salary && (
+              <p className="text-sm text-red-500">{errors.salary}</p>
+            )}
+          </div>
+
+          <div className="space-y-2 flex items-center gap-2 pt-7">
+            <input
+              id="isMedicalDirector"
+              type="checkbox"
+              checked={formData.isMedicalDirector}
+              onChange={(e) =>
+                handleInputChange("isMedicalDirector", e.target.checked)
+              }
+              className="w-4 h-4 rounded border-gray-300"
+            />
+            <Label htmlFor="isMedicalDirector" className="cursor-pointer">
+              Medical Director
+            </Label>
           </div>
         </div>
       </FormCard>
