@@ -4,7 +4,7 @@ import { useState } from "react"
 import DeactivateModal from "./DeactivateModal" // Adjust path as needed
 import AddMachineModal from "./AddMachineModal" // Adjust path as needed
 
-interface Machine {
+interface Machine { 
   id: string
   serial: string
   room: string
