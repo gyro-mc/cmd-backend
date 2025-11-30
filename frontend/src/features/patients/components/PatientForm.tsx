@@ -42,8 +42,6 @@ export function PatientForm({
     insuranceNumber: initialData.insuranceNumber || "",
     emergencyContactName: initialData.emergencyContactName || "",
     emergencyContactPhone: initialData.emergencyContactPhone || "",
-    allergies: initialData.allergies || [],
-    currentMedications: initialData.currentMedications || [],
   });
 
   const [errors, setErrors] = useState<
@@ -115,9 +113,7 @@ export function PatientForm({
                 id="firstName"
                 placeholder="John"
                 value={formData.firstName}
-                onChange={(e) =>
-                  handleInputChange("firstName", e.target.value)
-                }
+                onChange={(e) => handleInputChange("firstName", e.target.value)}
                 className={`pl-10 ${errors.firstName ? "border-red-500" : ""}`}
               />
             </div>
@@ -193,9 +189,7 @@ export function PatientForm({
                 id="birthDate"
                 type="date"
                 value={formData.birthDate}
-                onChange={(e) =>
-                  handleInputChange("birthDate", e.target.value)
-                }
+                onChange={(e) => handleInputChange("birthDate", e.target.value)}
                 className={`pl-10 ${errors.birthDate ? "border-red-500" : ""}`}
               />
             </div>

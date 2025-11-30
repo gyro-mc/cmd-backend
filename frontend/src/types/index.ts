@@ -46,8 +46,6 @@ export interface PatientFormData {
   insuranceNumber?: string;
   emergencyContactName?: string;
   emergencyContactPhone?: string;
-  allergies?: string[];
-  currentMedications?: string[];
 }
 
 export interface VascularAccess {

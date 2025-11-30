@@ -123,8 +123,6 @@ export function PatientProfile({
     insuranceNumber: "",
     emergencyContactName: "",
     emergencyContactPhone: "",
-    allergies: [],
-    currentMedications: [],
   });
 
   useEffect(() => {
@@ -150,8 +148,6 @@ export function PatientProfile({
         insuranceNumber: data.insuranceNumber,
         emergencyContactName: data.emergencyContactName,
         emergencyContactPhone: data.emergencyContactPhone,
-        allergies: data.allergies,
-        currentMedications: data.currentMedications,
       });
     } catch (error) {
       console.error("Failed to load patient:", error);
@@ -189,8 +185,6 @@ export function PatientProfile({
         insuranceNumber: patient.insuranceNumber,
         emergencyContactName: patient.emergencyContactName,
         emergencyContactPhone: patient.emergencyContactPhone,
-        allergies: patient.allergies,
-        currentMedications: patient.currentMedications,
       });
     }
     setIsEditMode(false);
