@@ -76,11 +76,17 @@ app.use("/users", userRouter);
 
 app.use("/patients", patientRouter);
 app.use(errorHandler);
-// Start the server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  Logger.success(`Server is running on port ${PORT}`);
-  Logger.success(
-    `📚 Swagger UI available at http://localhost:${PORT}/api-docs`
-  );
-});
+
+// For Vercel serverless deployment
+export default app;
+
+// Start the server (only in development)
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    Logger.success(`Server is running on port ${PORT}`);
+    Logger.success(
+      `📚 Swagger UI available at http://localhost:${PORT}/api-docs`
+    );
+  });
+}
